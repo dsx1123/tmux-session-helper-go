@@ -501,8 +501,9 @@ func (c *Connection) ReleaseToTmux(profile Profile) {
 
 	if profile.Protocol == "ssh" {
 		var decPwd string
+		var err error
 		if profile.Password != "" {
-			decPwd, err := c.enc.Decrypt(profile.Password)
+			decPwd, err = c.enc.Decrypt(profile.Password)
 			if err != nil {
 				fmt.Printf("Error decrypting password %s for profile %s: %v\n", decPwd, profile.Name, err)
 			}

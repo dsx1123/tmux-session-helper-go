@@ -1,0 +1,21 @@
+#compdef connect
+
+_connect() {
+    local line state
+
+    _arguments -C \
+        "1: :->cmds" \
+        "*::arg:->args"
+
+    case "$state" in
+        cmds)
+            local -a completions
+            completions=("${(@f)$(connect --complete '')}")
+            _describe 'command' completions
+            ;;
+        *)
+            ;;
+    esac
+}
+
+_connect "$@"
