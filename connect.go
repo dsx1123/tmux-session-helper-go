@@ -589,6 +589,28 @@ func generateCompletions(conn *Connection, prefix string) {
 	}
 }
 
+func printHelp() {
+	fmt.Println("Tmux Session Helper - SSH/Telnet Connection Manager")
+	fmt.Printf("Author: %s\n\n", author)
+	fmt.Println("Usage: connect [OPTION|NAME]")
+	fmt.Println("\nOptions:")
+	fmt.Println("  -h, --help     Show this help message")
+	fmt.Println("  init           Initialize the database")
+	fmt.Println("  list           List all connection profiles")
+	fmt.Println("  add            Add a new connection profile")
+	fmt.Println("  delete         Delete a connection profile")
+	fmt.Println("  update         Update an existing connection profile")
+	fmt.Println("  encrypt        Encrypt plaintext passwords in database")
+	fmt.Println("  NAME           Search and connect to profile(s) by name")
+	fmt.Println("\nExamples:")
+	fmt.Println("  connect init              # Initialize database")
+	fmt.Println("  connect list              # List all profiles")
+	fmt.Println("  connect add               # Add new profile")
+	fmt.Println("  connect myserver          # Connect to profile matching 'myserver'")
+	fmt.Println("\nDatabase: ~/.mess_config/profile.sqlite.db")
+	fmt.Println("Password Encryption Key file: ~/.tmux_session_key")
+}
+
 func main() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
@@ -603,6 +625,12 @@ func main() {
 	keyFile := filepath.Join(home, ".tmux_session_key")
 
 	args := os.Args[1:]
+
+	// Handle help option
+	if len(args) > 0 && (args[0] == "-h" || args[0] == "--help") {
+		printHelp()
+		os.Exit(0)
+	}
 
 	// Handle completion mode
 	if len(args) >= 2 && args[0] == "--complete" {
